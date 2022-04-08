@@ -1,13 +1,13 @@
-FROM alpine:3.12
-LABEL maintainer="avpnusr"
+FROM debian:11-slim
+#LABEL maintainer=""
 
 COPY service /etc/service/
 
 EXPOSE 8118 9050
 
-RUN apk update --no-cache && apk upgrade -a --no-cache && apk --update --no-cache add privoxy tor runit tini wget \
-&& addgroup -S tordocker \
-&& adduser -S tordocker -G tordocker \
+RUN apt-get update && apt-get dist-upgrade -y && apt-get -y install privoxy obfs4proxy tor runit tini wget \
+&& addgroup --system tordocker \
+&& adduser --system tordocker --ingroup tordocker \
 && chown tordocker:tordocker /etc/service \
 && chown -R tordocker:tordocker /etc/service/*
 
